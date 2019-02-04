@@ -50,10 +50,6 @@ class Mongodb < Formula
     # New Go tools have their own build script but the server scons "install" target is still
     # responsible for installing them.
     cd "src/mongo/gotools/src/github.com/mongodb/mongo-tools" do
-      inreplace "build.sh" do |s|
-        s.gsub! "$(git describe)", version.to_s
-        s.gsub! "$(git rev-parse HEAD)", "homebrew"
-      end
       ENV["CPATH"] = Formula["openssl"].opt_include
       ENV["LIBRARY_PATH"] = Formula["openssl"].opt_lib
       ENV["GOROOT"] = Formula["go"].opt_libexec
