@@ -5,12 +5,12 @@ class Mongodb < Formula
   sha256 "d967098fc91d105cdb0f400c8b837e5c2795c3638d7720392bc47afb1efe1c10"
   revision 1
 
-  bottle do
-    cellar :any
-    sha256 "ab08fc6748bc37d0e2ec209126db3236bd80a2ae4edee2f6fc34d96481fe34c7" => :mojave
-    sha256 "482cafb558d39fd6cae4d5d1abe07c7329a94b961fca00dc3ae71dc3be34deb9" => :high_sierra
-    sha256 "0b98be90831544f051d8244c253f61dd98a5d6f421663c3353b34feef562eae7" => :sierra
-  end
+    bottle do
+      root_url "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.5.tgz"
+      sha256 "3a7c5a60ab3b5d0614d44e64c02f3550ca1f639da1b618d2b566a0224108f67d" => :mojave
+      sha256 "3a7c5a60ab3b5d0614d44e64c02f3550ca1f639da1b618d2b566a0224108f67d" => :high_sierra
+      sha256 "3a7c5a60ab3b5d0614d44e64c02f3550ca1f639da1b618d2b566a0224108f67d" => :sierra
+    end
 
   depends_on "go" => :build
   depends_on "pkg-config" => :build
@@ -56,7 +56,7 @@ class Mongodb < Formula
       system "./build.sh", "ssl"
     end
 
-    (buildpath/"src/mongo-tools").install Dir["src/mongo/gotools/bin/*"]
+    (buildpath/"src/mongo/gotools/src/github.com/mongodb/mongo-tools").install Dir["src/mongo/gotools/bin/*"]
 
     args = %W[
       --prefix=#{prefix}
