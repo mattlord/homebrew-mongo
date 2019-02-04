@@ -1,4 +1,4 @@
-class Mongodb-Bin < Formula
+class MongodbBin < Formula
   desc "High-performance, schema-free, document-oriented database"
   homepage "https://www.mongodb.com/"
   url "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.5.tgz"
