@@ -5,12 +5,9 @@ class Mongodb < Formula
   sha256 "d967098fc91d105cdb0f400c8b837e5c2795c3638d7720392bc47afb1efe1c10"
   revision 1
 
-  # Have to see how we can include support for pre-built bottles/binaries  
-  # See the core definition here: https://github.com/Homebrew/homebrew-core/blob/master/Formula/mongodb.rb#L10
-  #bottle do
-  #  url "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.5.tgz"
-  #  sha256 "3a7c5a60ab3b5d0614d44e64c02f3550ca1f639da1b618d2b566a0224108f67d"
-  #end
+  # Have to see how we can support pre-built binaries since we can't leverage bottles
+  # See the mongodb-bin formula for a first attempt
+  bottle :unneeded
 
   depends_on "go" => :build
   depends_on "pkg-config" => :build
@@ -56,7 +53,7 @@ class Mongodb < Formula
       system "./build.sh", "ssl"
     end
 
-    (buildpath/"src/mongo/gotools/src/github.com/mongodb/mongo-tools").install Dir["src/mongo/gotools/bin/*"]
+    (buildpath/"src/mongo-tools").install Dir["src/mongo/gotools/src/github.com/mongodb/mongo-tools/bin/*"]
 
     args = %W[
       --prefix=#{prefix}
