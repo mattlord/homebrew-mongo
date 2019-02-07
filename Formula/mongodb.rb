@@ -13,7 +13,9 @@ class Mongodb < Formula
   def post_install
     (var/"mongodb").mkpath
     (var/"log/mongodb").mkpath
-    (etc/"mongod.conf").write mongodb_conf
+    if !(File.exist?((etc/"mongod.conf"))) then
+      (etc/"mongod.conf").write mongodb_conf
+    end
   end
 
   def mongodb_conf; <<~EOS
