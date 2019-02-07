@@ -1,84 +1,19 @@
-class Mongodb < Formula
+class MongodbBin < Formula
   desc "High-performance, schema-free, document-oriented database"
   homepage "https://www.mongodb.com/"
-  url "https://fastdl.mongodb.org/src/mongodb-src-r4.0.5.tar.gz"
-  sha256 "d967098fc91d105cdb0f400c8b837e5c2795c3638d7720392bc47afb1efe1c10"
-  revision 1
+  url "https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.5.tgz"
+  sha256 "3a7c5a60ab3b5d0614d44e64c02f3550ca1f639da1b618d2b566a0224108f67d"
 
-  # Have to see how we can support pre-built binaries since we can't leverage bottles
-  # See the mongodb-bin formula for a first attempt
   bottle :unneeded
 
-  depends_on "go" => :build
-  depends_on "pkg-config" => :build
-  depends_on "scons" => :build
-  depends_on :xcode => ["8.3.2", :build]
-
-  depends_on "openssl"
-  depends_on "python@2"
-
-  resource "Cheetah" do
-    url "https://files.pythonhosted.org/packages/cd/b0/c2d700252fc251e91c08639ff41a8a5203b627f4e0a2ae18a6b662ab32ea/Cheetah-2.4.4.tar.gz"
-    sha256 "be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550"
-  end
-
-  resource "PyYAML" do
-    url "https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769/PyYAML-3.13.tar.gz"
-    sha256 "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf"
-  end
-
-  resource "typing" do
-    url "https://files.pythonhosted.org/packages/bf/9b/2bf84e841575b633d8d91ad923e198a415e3901f228715524689495b4317/typing-3.6.6.tar.gz"
-    sha256 "4027c5f6127a6267a435201981ba156de91ad0d1d98e9ddc2aa173453453492d"
-  end
-
   def install
-    ENV.libcxx
-
-    ["Cheetah", "PyYAML", "typing"].each do |r|
-      resource(r).stage do
-        system "python", *Language::Python.setup_install_args(buildpath/"vendor")
-      end
-    end
-    (buildpath/".brew_home/Library/Python/2.7/lib/python/site-packages/vendor.pth").write <<~EOS
-      import site; site.addsitedir("#{buildpath}/vendor/lib/python2.7/site-packages")
-    EOS
-
-    # New Go tools have their own build script but the server scons "install" target is still
-    # responsible for installing them.
-    cd "src/mongo/gotools/src/github.com/mongodb/mongo-tools" do
-      ENV["CPATH"] = Formula["openssl"].opt_include
-      ENV["LIBRARY_PATH"] = Formula["openssl"].opt_lib
-      ENV["GOROOT"] = Formula["go"].opt_libexec
-      system "./build.sh", "ssl"
-    end
-
-    (buildpath/"src/mongo-tools").install Dir["src/mongo/gotools/src/github.com/mongodb/mongo-tools/bin/*"]
-
-    args = %W[
-      --prefix=#{prefix}
-      -j#{ENV.make_jobs}
-      CC=#{ENV.cc}
-      CXX=#{ENV.cxx}
-      CCFLAGS=-mmacosx-version-min=#{MacOS.version}
-      LINKFLAGS=-mmacosx-version-min=#{MacOS.version}
-      --build-mongoreplay=true
-      --disable-warnings-as-errors
-      --use-new-tools
-      --ssl
-      CCFLAGS=-I#{Formula["openssl"].opt_include}
-      LINKFLAGS=-L#{Formula["openssl"].opt_lib}
-    ]
-
-    system "scons", "install", *args
-
-    (buildpath/"mongod.conf").write mongodb_conf
-    etc.install "mongod.conf"
+    prefix.install Dir["*"]
   end
 
   def post_install
     (var/"mongodb").mkpath
     (var/"log/mongodb").mkpath
+    (etc/"mongod.conf").write mongodb_conf
   end
 
   def mongodb_conf; <<~EOS
