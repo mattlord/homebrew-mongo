@@ -1,4 +1,4 @@
-class Mongodb < Formula
+class MongodbFromSrc < Formula
   desc "High-performance, schema-free, document-oriented database (build from source)"
   homepage "https://www.mongodb.com/"
   url "https://fastdl.mongodb.org/src/mongodb-src-r4.0.5.tar.gz"
