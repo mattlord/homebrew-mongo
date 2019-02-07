@@ -4,7 +4,7 @@ A Homebrew Tap For MongoDB Software.
 Setup the custom tap with: `$ brew tap mattlord/homebrew-mongo`
 
 Install packages with: 
-* `$ brew install mattlord/mongo/mongodb-bin`
+* `$ brew install mattlord/mongo/mongodb`
 * Build From Source: `$ brew install mattlord/mongo/mongodb-src`
 
 
