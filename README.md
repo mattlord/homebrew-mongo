@@ -1,7 +1,7 @@
 # homebrew-mongo
 A Homebrew Tap For MongoDB Software. 
 
-Setup the custom tap with: `$ brew tap mattlord/homebrew-mongo`
+Setup the custom tap with: `$ brew tap mattlord/mongo`
 
 Install packages with: 
 * `$ brew install mattlord/mongo/mongodb`
